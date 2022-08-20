@@ -16,6 +16,8 @@ app.set("view engine", "pug");
 app.set("views", process.cwd() + "/src/views")
 // package.json파일을 기준으로 실행경로를 잡아서 위의 코드로 src안에있는 pug파일의 경로를 잡아준다.
 // default값은 "현재 작업 디렉토리 + /views" 이다.
+app.use(express.urlencoded({ extended: true }));
+//HTML form을 이해하고 그 form을 우리가 사용할 수 있는 JS object 형식으로 통역해준다.
 app.use("/", globalRouter);
 app.use("/videos", videoRouter);
 app.use("/users", userRouter);
