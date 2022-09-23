@@ -2,12 +2,10 @@ import Video from "../models/Video";
 // models import
 
 export const home = async (req, res) => {
-    try {
-        const videos = await Video.find({});
-        return res.render("home", { pageTitle: "Home", videos })
-    } catch {
-        return res.render("server-error");
-    }
+    const videos = await Video.find({});
+    //home은 모든 Video 를 찾아내고 videos는 video 들로 구성된 array 이다.
+    return res.render("home", { pageTitle: "Home", videos })
+    // videos 를 home template 으로 전송하고 있다.
 }
 export const watch = (req, res) => {
     const { id } = req.params;
@@ -24,20 +22,22 @@ export const postEdit = (req, res) => {
     res.redirect(`/videos/${id}`);
 }
 export const getUpload = (req, res) => {
-    return res.render("upload", { pageTitle: "Upload Video" })
+    return res.render("upload", { pageTitle: "Upload Video" });
 }
 
 export const postUpload = async (req, res) => {
     const { title, description, hashtags } = req.body;
-    await Video.create({
-        title,
-        description,
-        createdAt: Date.now(),
-        hashtags: hashtags.split(",").map((word) => `#${word}`),
-        meta: {
-            views: 0,
-            rating: 0,
-        },
-    });
-    return res.redirect("/");
+    try {
+        await Video.create({
+            title,
+            description,
+            hashtags: hashtags.split(",").map((word) => `#${word}`),
+        });
+        return res.redirect("/");
+    } catch (error) {
+        // 만약 에러 발생시 upload page render , error message 출력
+        return res.render("upload",
+            { pageTitle: "Upload Video", errorMessage: error._message });
+    }
+
 }
