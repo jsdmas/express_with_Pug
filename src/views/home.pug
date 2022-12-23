@@ -1,9 +1,0 @@
-extends base.pug
-include mixins/video
-
-block content 
-    //- videos 에 있는 각각의 info에 video mixin를 사용.
-    each info in videos
-        +video(info)
-    else 
-        li Sorry noting found.
