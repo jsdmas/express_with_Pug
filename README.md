@@ -30,6 +30,9 @@ ex)
 localhost/설정라우터주소?year=1997&rating=5
 ```
 위의 데이터들은 req.query를통해 값을 받아온다.
+
+## params
+req.param 는 router가 주는 express의 기능이다.
 ## locals
 
 - app.locals
@@ -43,3 +46,7 @@ localhost/설정라우터주소?year=1997&rating=5
   - res.locals의 프로퍼티들은 request의 라이프 타임 동안에만 유효하다.
   - html/view 클라이언트 사이드로 변수들을 보낼 수 있으며, 그 변수들은 오로지 거기서만 사용할 수 있다.
   - ex) res.locals.siteTitle --> json에 siteTitle변수를 추가하여 사용할 수 있다.
+
+## query (쿼리)
+쿼리는 **데이터베이스에게 특정한 데이터를 보여달라는 클라이언트(사용자)의 요청**을 말한다.  
+흔히 `쿼리문을 작성한다` 라는 뜻은 **데이터베이스에서 원하는 정보를 가져오는 코드를 작성한다** 라고 이해하면 된다.  

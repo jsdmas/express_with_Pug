@@ -3,10 +3,11 @@ mixin video(info)
         h4
             //- 받은 객체의 id값을 url에 사용.
             a(href=`videos/${info.id}`)=info.title 
+        p=info.description
         ul 
-            li #{info.rating} / 5
-            li #{info.comments} comments.
-            li Posted  #{info.createdAt}.
-            li #{info.views} views.
+            each hashtag in info.hashtags 
+                li=hashtag
+        small=info.createdAt
+        hr
 
     
