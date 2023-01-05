@@ -54,3 +54,6 @@ req.param 는 router가 주는 express의 기능이다.
 ## Schema.pre
 pre(preformatted) : 미리 포맷된(미리 정의된)
 mongoose 의 middleware이다.
+
+## session
+세션은 브라우저와 백엔드 사이의 memory, history 같은 것이다.

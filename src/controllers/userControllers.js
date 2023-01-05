@@ -33,7 +33,10 @@ export const postLogin = async (req, res) => {
     if (!ok) {
         return res.status(400).render("login", { pageTitle, errorMessage: "Wrong Password" });
     }
-    console.log("Login user : ", username);
+
+    req.session.loggedIn = true;
+    req.session.user = user;
+
     return res.redirect("/");
 };
 
