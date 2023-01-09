@@ -1,6 +1,14 @@
 # Wetube Reloaded
 
 22.12.20(화) 초기화 
+
+## babel
+
+[babel에 대하여](https://www.daleseo.com/js-babel/)
+## exec
+
+exec의 의미는 '조건을 가지고 찾은 파일들을 대상으로 다음 명령어를 실행하라
+
 ## Node
 노드란?  
 Node.js는 Chrome V8 Javascript 엔진으로 빌드된 Javascript 런타임이다.  
