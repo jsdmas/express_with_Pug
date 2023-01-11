@@ -2,7 +2,7 @@ import User from "../models/User";
 import bcrypt from 'bcrypt';
 import fetch from "cross-fetch";
 
-export const getJoin = (req, res) => {
+export const getJoin = (_, res) => {
     return res.render("join", { pageTitle: "join User" })
 };
 export const postJoin = async (req, res) => {
@@ -21,7 +21,7 @@ export const postJoin = async (req, res) => {
     return res.redirect("/");
 };
 
-export const getLogin = (req, res) => res.render("login", { pageTitle: "Login" });
+export const getLogin = (_, res) => res.render("login", { pageTitle: "Login" });
 
 export const postLogin = async (req, res) => {
     const { body: { username, password } } = req;
@@ -120,3 +120,76 @@ export const logout = (req, res) => {
     req.session.destroy();
     return res.redirect("/");
 };
+
+
+export const getEdit = (_, res) => {
+    return res.render("edit-profile", { pageTitle: "edit-profile" });
+}
+
+export const postEdit = async (req, res) => {
+    const { body: { name, email, username, location },
+        session: { user: { _id, username: sessionUsername, email: sessionEmail } } } = req;
+
+    // db에 중복되는 email, username이 있을경우 errorMessage 보내기.
+    let searchParams = [];
+    sessionUsername !== username ? searchParams.push({ username }) : searchParams;
+    sessionEmail !== email ? searchParams.push({ email }) : searchParams;
+
+    if (searchParams.length > 0) {
+        const foundUser = await User.findOne({ $or: searchParams });
+        if (foundUser && foundUser._id.toString() !== _id) {
+            return res.status(400).render("edit-profile", {
+                pageTitle: "edit-profile",
+                errorMessage: "This username/email is already taken.",
+            })
+        }
+    }
+
+    // backend뿐아니라 prontend에도 변경된 값이 반영되어야 하기 떄문에
+    // user의 값을 가져다주는 session도 update 해줘야한다.
+    const updateUser = await User.findByIdAndUpdate(_id, {
+        name, email, username, location,
+    }, { new: true });
+    req.session.user = updateUser;
+    return res.redirect("/users/edit");
+}
+
+export const getChangePassword = (_, res) => {
+    return res.render("change-password", { pageTitle: "change-password" });
+}
+
+export const postChangePassword = async (req, res) => {
+    const { body: { oldPassword,
+        newPassword,
+        newPasswordConfirmation },
+        session: { user: { _id, password } } } = req;
+
+    if (oldPassword === newPassword) {
+        return res.status(400).render("change-password", { pageTitle: "change-password", errorMessage: "기존 비밀번호와 다르게 생성하여야 합니다." });
+    }
+
+    if (newPassword !== newPasswordConfirmation) {
+        return res.status(400).render("change-password", { pageTitle: "change-password", errorMessage: "비밀번호가 일치하지 않습니다." });
+    }
+    const user = await User.findById(_id);
+    const ok = await bcrypt.compare(oldPassword, password);
+    /** 2번쨰방법 : user를 찾아서 가장 최근의 DB에 있는 비밀번호를 사용.
+     *  이 방법을 사용할시 세션을 업데이트 할 필요가 없어진다.
+        const ok = bcrypt.compare(oldPassword, user.password);
+     */
+    if (!ok) {
+        return res.status(400).render("change-password", { pageTitle: "change-password", errorMessage: "비밀번호가 일치하지 않습니다." });
+    }
+    // 새로운 password 저장
+    user.password = newPassword;
+    // 비밀번호 hash
+    await user.save();
+    // session 의 비밀번호를 update해줘야 logout이 된다.
+    req.session.user.password = user.password;
+
+    req.session.destroy();
+    return res.redirect("/login");
+}
+
+
+
