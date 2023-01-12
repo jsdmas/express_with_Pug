@@ -32,6 +32,9 @@ app.use(session({
 
 app.use(localsMiddleware);
 
+// 파일경로, 파일이름
+app.use("/uploads", express.static("uploads"));
+
 app.use("/", rootRouter);
 app.use("/videos", videoRouter);
 app.use("/users", userRouter);

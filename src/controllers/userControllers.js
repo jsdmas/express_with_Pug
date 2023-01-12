@@ -128,7 +128,7 @@ export const getEdit = (_, res) => {
 
 export const postEdit = async (req, res) => {
     const { body: { name, email, username, location },
-        session: { user: { _id, username: sessionUsername, email: sessionEmail } } } = req;
+        session: { user: { _id, avatarUrl, username: sessionUsername, email: sessionEmail } }, file } = req;
 
     // db에 중복되는 email, username이 있을경우 errorMessage 보내기.
     let searchParams = [];
@@ -148,7 +148,7 @@ export const postEdit = async (req, res) => {
     // backend뿐아니라 prontend에도 변경된 값이 반영되어야 하기 떄문에
     // user의 값을 가져다주는 session도 update 해줘야한다.
     const updateUser = await User.findByIdAndUpdate(_id, {
-        name, email, username, location,
+        name, email, username, location, avatarUrl: file ? file.path : avatarUrl
     }, { new: true });
     req.session.user = updateUser;
     return res.redirect("/users/edit");
