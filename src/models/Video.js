@@ -13,6 +13,7 @@ const videoSchema = new Schema({
         views: { type: Number, default: 0, required: true },
         rating: { type: Number, default: 0, required: true },
     },
+    owner: { required: true, ref: "User", type: mongoose.Schema.Types.ObjectId }
 });
 
 // model이 셍성되기전에 생성해주어야 한다.

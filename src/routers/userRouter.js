@@ -1,6 +1,6 @@
 import express from "express";
 
-import { finishGithubLogin, getChangePassword, getEdit, logout, postChangePassword, postEdit, startGithubLogin } from '../controllers/userControllers';
+import { finishGithubLogin, getChangePassword, getEdit, logout, postChangePassword, postEdit, see, startGithubLogin } from '../controllers/userControllers';
 import { protectorMiddleware, publicMiddleware, avatarUpload } from "../middlewares";
 
 const userRouter = express.Router();
@@ -10,5 +10,6 @@ userRouter.route("/edit").all(protectorMiddleware).get(getEdit).post(avatarUploa
 userRouter.get("/github/start", publicMiddleware, startGithubLogin);
 userRouter.get("/github/finish", publicMiddleware, finishGithubLogin);
 userRouter.route("/change-password").all(protectorMiddleware).get(getChangePassword).post(postChangePassword);
+userRouter.get("/:id", see);
 
 export default userRouter;

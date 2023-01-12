@@ -1,4 +1,5 @@
 import User from "../models/User";
+import Video from '../models/Video';
 import bcrypt from 'bcrypt';
 import fetch from "cross-fetch";
 
@@ -189,6 +190,13 @@ export const postChangePassword = async (req, res) => {
 
     req.session.destroy();
     return res.redirect("/login");
+}
+
+export const see = async (req, res) => {
+    const { params: { id } } = req;
+    const user = await User.findById(id).populate("videos");
+
+    return res.render("profile", { pageTitle: user.name, user });
 }
 
 

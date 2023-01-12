@@ -2,7 +2,7 @@ mixin video(info)
     div
         h4
             //- 받은 객체의 id값을 url에 사용.
-            a(href=`videos/${info.id}`)=info.title 
+            a(href=`/videos/${info.id}`)=info.title 
         p=info.description
         ul 
             each hashtag in info.hashtags 

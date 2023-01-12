@@ -4,7 +4,11 @@ block content
     div 
         p=video.description
         small=video.createdAt
+        br
+        a(href=`/users/${video.owner._id}`) #{video.owner.name} 의 Profile 
     video(src="/"+ video.fileUrl, width="1000" height="400", controls) 
-    a(href=`${video.id}/edit`) Edit Video &rarr;
-    br
-    a(href=`${video.id}/delete`) Delete Video &rarr;
+
+    if String(video.owner._id) === String(loggedInUser._id)
+        a(href=`${video.id}/edit`) Edit Video &rarr;
+        br
+        a(href=`${video.id}/delete`) Delete Video &rarr;
