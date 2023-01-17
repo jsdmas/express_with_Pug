@@ -32,8 +32,11 @@ app.use(session({
 
 app.use(localsMiddleware);
 
-// 파일경로, 파일이름
+// 파일경로(브라우저 URL 설정이라서 파일이름과 꼭 같을 필요는 없다.), 파일이름
 app.use("/uploads", express.static("uploads"));
+
+// webpack 적용
+app.use("/static", express.static("assets"));
 
 app.use("/", rootRouter);
 app.use("/videos", videoRouter);

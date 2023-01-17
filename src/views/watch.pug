@@ -1,14 +1,24 @@
-extends base.pug 
+extends base
 
-block content 
-    div 
-        p=video.description
-        small=video.createdAt
-        br
-        a(href=`/users/${video.owner._id}`) #{video.owner.name} 의 Profile 
-    video(src="/"+ video.fileUrl, width="1000" height="400", controls) 
+block content
+    video(src="/" + video.fileUrl, controls, width="1000" height="700")
+    div
+        button#play Play
+        button#mute Mute
+        span#time 00:00/00:00
+        input(type="range",step="0.1", min="0", max="1")#volume
+    //-
+        div
+            p=video.description
+            small=video.createdAt
+        div
+            small Uploaded by 
+                a(href=`/users/${video.owner._id}`)=video.owner.name
+        if String(video.owner._id) === String(loggedInUser._id)
+            a(href=`${video.id}/edit`) Edit Video &rarr;
+            br
+            a(href=`${video.id}/delete`) Delete Video &rarr;
 
-    if String(video.owner._id) === String(loggedInUser._id)
-        a(href=`${video.id}/edit`) Edit Video &rarr;
-        br
-        a(href=`${video.id}/delete`) Delete Video &rarr;
+
+block scripts
+    script(src="/static/js/videoPlayer.js") 
