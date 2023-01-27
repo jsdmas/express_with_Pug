@@ -65,3 +65,6 @@ mongoose 의 middleware이다.
 
 ## session
 세션은 브라우저와 백엔드 사이의 memory, history 같은 것이다.
+
+## server side rendering
+지금 만들고있는건 pug template로 서버로 페이지를 render하는것이므로 현재(23.01.01)기준으로 예전방법으로 사이트를 구현하고 있다.

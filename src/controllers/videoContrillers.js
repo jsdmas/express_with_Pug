@@ -1,7 +1,7 @@
 import User from "../models/User";
 import Video from "../models/Video";
 
-export const home = async (req, res) => {
+export const home = async (_, res) => {
     const videos = await Video.find({})
         .sort({ createdAt: "desc" })
         .populate("owner");
@@ -48,7 +48,7 @@ export const postEdit = async (req, res) => {
     return res.redirect(`/videos/${id}`);
 }
 
-export const getUpload = (req, res) => {
+export const getUpload = (_, res) => {
     return res.render("upload", { pageTitle: "Upload Video" });
 }
 
@@ -100,3 +100,16 @@ export const search = async (req, res) => {
     }
     return res.render("search", { pageTitle: "Search", videos });
 }
+
+export const registerView = async (req, res) => {
+    const { params: { id } } = req;
+    const video = await Video.findById(id);
+    if (!video) {
+        // status는 상태코드만 보내고 sendStatus는 상태코드를 보내고 연결을 종료시킨다.
+        return res.sendStatus(404);
+    }
+    video.meta.views = video.meta.views + 1;
+    await video.save();
+    return res.sendStatus(200);
+};
+
